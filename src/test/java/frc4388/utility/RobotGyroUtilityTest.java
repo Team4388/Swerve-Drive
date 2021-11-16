@@ -15,7 +15,7 @@ import com.kauailabs.navx.frc.AHRS;
 import org.junit.*;
 
 import frc4388.mocks.MockPigeonIMU;
-import frc4388.robot.Constants.DriveConstants;
+import frc4388.robot.Constants.ArcadeDriveConstants;
 
 /**
  * Add your docs here.
@@ -29,7 +29,7 @@ public class RobotGyroUtilityTest {
     @Test
     public void testConstructor() {
         // Arrange
-        MockPigeonIMU pigeon = new MockPigeonIMU(DriveConstants.DRIVE_PIGEON_ID);
+        MockPigeonIMU pigeon = new MockPigeonIMU(ArcadeDriveConstants.DRIVE_PIGEON_ID);
         AHRS navX = mock(AHRS.class);
         gyroPigeon = new RobotGyro(pigeon);
         gyroNavX = new RobotGyro(navX);
@@ -46,7 +46,7 @@ public class RobotGyroUtilityTest {
     @Test
     public void testHeadingPigeon() {
         // Arrange
-        MockPigeonIMU pigeon = new MockPigeonIMU(DriveConstants.DRIVE_PIGEON_ID);
+        MockPigeonIMU pigeon = new MockPigeonIMU(ArcadeDriveConstants.DRIVE_PIGEON_ID);
         gyroPigeon = new RobotGyro(pigeon);
 
         // Act & Assert
@@ -64,7 +64,7 @@ public class RobotGyroUtilityTest {
     @Test
     public void testYawPitchRollPigeon() {
         // Arrange
-        MockPigeonIMU pigeon = new MockPigeonIMU(DriveConstants.DRIVE_PIGEON_ID);
+        MockPigeonIMU pigeon = new MockPigeonIMU(ArcadeDriveConstants.DRIVE_PIGEON_ID);
         gyroPigeon = new RobotGyro(pigeon);
 
         // Assert
@@ -136,7 +136,7 @@ public class RobotGyroUtilityTest {
     @Test
     public void testRatesPigeon() {
         // Arrange
-        MockPigeonIMU pigeon = new MockPigeonIMU(DriveConstants.DRIVE_PIGEON_ID);
+        MockPigeonIMU pigeon = new MockPigeonIMU(ArcadeDriveConstants.DRIVE_PIGEON_ID);
         gyroPigeon = new RobotGyro(pigeon);
         RobotTime robotTime = RobotTime.getInstance();
         gyroPigeon.updatePigeonDeltas();

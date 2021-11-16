@@ -18,7 +18,7 @@ import frc4388.utility.LEDPatterns;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final class DriveConstants {
+    public static final class ArcadeDriveConstants {
         public static final int DRIVE_LEFT_FRONT_CAN_ID = 2;
         public static final int DRIVE_RIGHT_FRONT_CAN_ID = 4;
 	    public static final int DRIVE_LEFT_BACK_CAN_ID = 3;
@@ -27,6 +27,12 @@ public final class Constants {
         public static final int DRIVE_PIGEON_ID = 6;
 
         public static final int SMARTDASHBOARD_UPDATE_FRAME = 2;
+    }
+
+    public static final class SwerveDriveConstants {
+        public static final double ROTATION_SPEED = 0.1;
+        public static final double WIDTH = 0;
+        public static final double HEIGHT = 0;
     }
 
     public static final class LEDConstants {

@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc4388.robot.Constants.DriveConstants;
+import frc4388.robot.Constants.ArcadeDriveConstants;
 import frc4388.utility.RobotGyro;
 import frc4388.utility.RobotTime;
 
 /**
  * Add your docs here.
  */
-public class Drive extends SubsystemBase {
+public class ArcadeDrive extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -36,7 +36,7 @@ public class Drive extends SubsystemBase {
   /**
    * Add your docs here.
    */
-  public Drive(WPI_TalonFX leftFrontMotor, WPI_TalonFX rightFrontMotor, WPI_TalonFX leftBackMotor,
+  public ArcadeDrive(WPI_TalonFX leftFrontMotor, WPI_TalonFX rightFrontMotor, WPI_TalonFX leftBackMotor,
       WPI_TalonFX rightBackMotor, DifferentialDrive driveTrain, RobotGyro gyro) {
 
     m_leftFrontMotor = leftFrontMotor;
@@ -51,7 +51,7 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     m_gyro.updatePigeonDeltas();
 
-    if (m_robotTime.m_frameNumber % DriveConstants.SMARTDASHBOARD_UPDATE_FRAME == 0) {
+    if (m_robotTime.m_frameNumber % ArcadeDriveConstants.SMARTDASHBOARD_UPDATE_FRAME == 0) {
       updateSmartDashboard();
     }
   }

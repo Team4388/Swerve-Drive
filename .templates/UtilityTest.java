@@ -15,7 +15,7 @@ import com.kauailabs.navx.frc.AHRS;
 import org.junit.*;
 
 import frc4388.mocks.MockPigeonIMU;
-import frc4388.robot.Constants.DriveConstants;
+import frc4388.robot.Constants.ArcadeDriveConstants;
 
 /**
  * Based on the RobotGyroUtilityTest class
@@ -27,7 +27,7 @@ public class UtilityTest {
     @Test
     public void testConstructor() {
         // Arrange
-        MockPigeonIMU pigeon = new MockPigeonIMU(DriveConstants.DRIVE_PIGEON_ID);
+        MockPigeonIMU pigeon = new MockPigeonIMU(ArcadeDriveConstants.DRIVE_PIGEON_ID);
         AHRS navX = mock(AHRS.class);
         gyroPigeon = new RobotGyro(pigeon);
         gyroNavX = new RobotGyro(navX);
@@ -44,7 +44,7 @@ public class UtilityTest {
     @Test
     public void testHeadingPigeon() {
         // Arrange
-        MockPigeonIMU pigeon = new MockPigeonIMU(DriveConstants.DRIVE_PIGEON_ID);
+        MockPigeonIMU pigeon = new MockPigeonIMU(ArcadeDriveConstants.DRIVE_PIGEON_ID);
         gyroPigeon = new RobotGyro(pigeon);
 
         // Act & Assert

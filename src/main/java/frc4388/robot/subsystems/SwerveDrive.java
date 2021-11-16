@@ -1,3 +1,19 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
+package frc4388.robot.subsystems;
+
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import frc4388.robot.Constants.SwerveDriveConstants;
+
 public class SwerveDrive
 {
     SwerveDriveKinematics m_kinematics;
@@ -17,8 +33,8 @@ public class SwerveDrive
 
     public void drive(double strafeX, double strafeY, double rotate)
     {
-        //https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
-        var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.RotationSpeed /*in rad/s */);
+        //https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html 
+        var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.ROTATION_SPEED /*in rad/s */);
         // Convert to module states
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
@@ -35,9 +51,9 @@ public class SwerveDrive
         SwerveModuleState backRight = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(/*get encoder positions*/));
     }
 
-    public void driveFieldRelative(double awayFromStation, double towardLeftBoundary, double rotate)
-    {
-        var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(awayFromStation, towardLeftBoundary, 
-            rotate * SwerveDriveConstants.RotationSpeed, /*get odometry angle*/)
-    }
+    // public void driveFieldRelative(double awayFromStation, double towardLeftBoundary, double rotate)
+    // {
+    //     var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(awayFromStation, towardLeftBoundary, 
+    //         rotate * SwerveDriveConstants.RotationSpeed, /*get odometry angle*/)
+    // }
 }

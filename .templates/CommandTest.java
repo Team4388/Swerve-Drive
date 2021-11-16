@@ -27,7 +27,7 @@ public class CommandTest {
     @Test
     public void testExample() {
         // Arrange
-        Drive drive = mock(Drive.class);
+        ArcadeDrive drive = mock(ArcadeDrive.class);
         RunCommand command = new RunCommand(() -> drive.driveWithInput(0, 0), drive);
 
         // Act
