@@ -33,8 +33,15 @@ public final class Constants {
         public static final double ROTATION_SPEED = 0.1;
         public static final double WIDTH = 0;
         public static final double HEIGHT = 0;
+        public static final int LEFT_FRONT_STEER_CAN_ID = 0;
+        public static final int LEFT_FRONT_WHEEL_CAN_ID = 0;
+        public static final int RIGHT_FRONT_STEER_CAN_ID = 0;
+        public static final int RIGHT_FRONT_WHEEL_CAN_ID = 0;
+        public static final int LEFT_BACK_STEER_CAN_ID = 0;
+        public static final int LEFT_BACK_WHEEL_CAN_ID = 0;
+        public static final int RIGHT_BACK_STEER_CAN_ID = 0;
+        public static final int RIGHT_BACK_WHEEL_CAN_ID = 0;
     }
-
     public static final class LEDConstants {
         public static final int LED_SPARK_ID = 0;
 
