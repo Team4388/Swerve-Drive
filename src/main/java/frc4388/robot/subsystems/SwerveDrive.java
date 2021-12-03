@@ -8,6 +8,7 @@
 package frc4388.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -27,8 +28,15 @@ public class SwerveDrive
     private WPI_TalonFX m_leftBackWheelMotor;
     private WPI_TalonFX m_rightBackSteerMotor;
     private WPI_TalonFX m_rightBackWheelMotor;
+    private CANCoder m_leftFrontEncoder; 
+    private CANCoder m_rightFrontEncoder;
+    private CANCoder m_leftBackEncoder;
+    private CANCoder m_rightBackEncoder;    
     public SwerveDrive(WPI_TalonFX leftFrontSteerMotor,WPI_TalonFX leftFrontWheelMotor,WPI_TalonFX rightFrontSteerMotor,WPI_TalonFX rightFrontWheelMotor,
-    WPI_TalonFX leftBackSteerMotor,WPI_TalonFX leftBackWheelMotor,WPI_TalonFX rightBackSteerMotor,WPI_TalonFX rightBackWheelMotor)
+    WPI_TalonFX leftBackSteerMotor,WPI_TalonFX leftBackWheelMotor,WPI_TalonFX rightBackSteerMotor,WPI_TalonFX rightBackWheelMotor, CANCoder leftFrontEncoder,
+    CANCoder rightFrontEncoder,
+    CANCoder leftBackEncoder,
+    CANCoder rightBackEncoder)
     {
         m_leftFrontSteerMotor = leftFrontSteerMotor;
         m_leftFrontWheelMotor = leftFrontWheelMotor;
@@ -38,6 +46,10 @@ public class SwerveDrive
         m_leftBackWheelMotor = leftBackWheelMotor;
         m_rightBackSteerMotor = rightBackSteerMotor;
         m_rightBackWheelMotor = rightBackWheelMotor;
+        m_leftFrontEncoder = leftFrontEncoder; 
+        m_rightFrontEncoder = rightFrontEncoder;
+        m_leftBackEncoder = leftBackEncoder;
+        m_rightBackEncoder = rightBackEncoder; 
         double halfWidth = SwerveDriveConstants.WIDTH / 2.d;
         double halfHeight = SwerveDriveConstants.HEIGHT / 2.d;
 
@@ -57,16 +69,16 @@ public class SwerveDrive
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
         // Front left module state
-        SwerveModuleState frontLeft = SwerveModuleState.optimize(moduleStates[0], new Rotation2d(/*get encoder positions*/));
+        SwerveModuleState leftFront = SwerveModuleState.optimize(moduleStates[0], new Rotation2d(m_leftFrontEncoder.getPosition()));
 
         // Front right module state
-        SwerveModuleState frontRight = SwerveModuleState.optimize(moduleStates[1], new Rotation2d(/*get encoder positions*/));
+        SwerveModuleState rightFront = SwerveModuleState.optimize(moduleStates[1], new Rotation2d(m_rightFrontEncoder.getPosition()));
 
         // Back left module state
-        SwerveModuleState backLeft = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(/*get encoder positions*/));
+        SwerveModuleState lefBack = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(m_leftBackEncoder.getPosition()));
 
         // Back right module state
-        SwerveModuleState backRight = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(/*get encoder positions*/));
+        SwerveModuleState rightBack = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(m_rightBackEncoder.getPosition()));
 
     }
 

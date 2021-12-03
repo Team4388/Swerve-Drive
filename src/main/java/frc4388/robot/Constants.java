@@ -41,6 +41,10 @@ public final class Constants {
         public static final int LEFT_BACK_WHEEL_CAN_ID = 0;
         public static final int RIGHT_BACK_STEER_CAN_ID = 0;
         public static final int RIGHT_BACK_WHEEL_CAN_ID = 0;
+        public static final int LEFT_FRONT_STEER_CAN_ENCODER_ID = 0;
+        public static final int RIGHT_FRONT_STEER_CAN_ENCODER_ID = 0;
+        public static final int LEFT_BACK_STEER_CAN_ENCODER_ID = 0;
+        public static final int RIGHT_BACK_STEER_CAN_ENCODER_ID = 0;
     }
     public static final class LEDConstants {
         public static final int LED_SPARK_ID = 0;
