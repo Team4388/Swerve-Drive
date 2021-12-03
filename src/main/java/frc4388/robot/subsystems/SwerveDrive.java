@@ -75,7 +75,7 @@ public class SwerveDrive
         SwerveModuleState rightFront = SwerveModuleState.optimize(moduleStates[1], new Rotation2d(m_rightFrontEncoder.getPosition()));
 
         // Back left module state
-        SwerveModuleState lefBack = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(m_leftBackEncoder.getPosition()));
+        SwerveModuleState leftBack = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(m_leftBackEncoder.getPosition()));
 
         // Back right module state
         SwerveModuleState rightBack = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(m_rightBackEncoder.getPosition()));
