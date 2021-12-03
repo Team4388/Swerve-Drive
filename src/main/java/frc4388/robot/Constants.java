@@ -31,6 +31,7 @@ public final class Constants {
 
     public static final class SwerveDriveConstants {
         public static final double ROTATION_SPEED = 0.1;
+        public static final double WHEEL_SPEED = 0.1;
         public static final double WIDTH = 0;
         public static final double HEIGHT = 0;
         public static final int LEFT_FRONT_STEER_CAN_ID = 0;
