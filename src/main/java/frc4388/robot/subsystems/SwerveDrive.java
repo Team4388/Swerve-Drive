@@ -82,9 +82,11 @@ public class SwerveDrive
         
         m_leftFrontWheelMotor.set(m_leftFrontSteerMotor.get() + leftFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightFrontWheelMotor.set(m_rightFrontSteerMotor.get() + rightFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
-        m_leftBackWheelMotor.set(m_leftBackSteerMotor.get() + lefBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
+        m_leftBackWheelMotor.set(m_leftBackSteerMotor.get() + leftBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightBackWheelMotor.set(m_rightBackSteerMotor.get() + rightBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
     
+        // PID
+        
     }
 
     // public void driveFieldRelative(double awayFromStation, double towardLeftBoundary, double rotate)
