@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc4388.robot.Constants.*;
 import frc4388.robot.subsystems.ArcadeDrive;
 import frc4388.robot.subsystems.LED;
+import frc4388.robot.subsystems.SwerveDrive;
 import frc4388.utility.LEDPatterns;
 import frc4388.utility.controller.IHandController;
 import frc4388.utility.controller.XboxController;
@@ -34,6 +35,17 @@ public class RobotContainer {
     private final ArcadeDrive m_robotArcadeDrive = new ArcadeDrive(m_robotMap.leftFrontMotor, m_robotMap.rightFrontMotor,
             m_robotMap.leftBackMotor, m_robotMap.rightBackMotor, m_robotMap.driveTrain, m_robotMap.gyroDrive);
 
+    private final SwerveDrive m_robotSwerveDrive = new SwerveDrive(
+        m_robotMap.leftFrontSteerMotor, m_robotMap.leftFrontWheelMotor,
+        m_robotMap.rightFrontSteerMotor, m_robotMap.rightFrontWheelMotor,
+        m_robotMap.leftBackSteerMotor, m_robotMap.leftBackWheelMotor,
+        m_robotMap.rightBackSteerMotor, m_robotMap.rightBackWheelMotor,
+        m_robotMap.leftFrontEncoder,
+        m_robotMap.rightFrontEncoder,
+        m_robotMap.leftBackEncoder,
+        m_robotMap.rightBackEncoder
+    );
+
     private final LED m_robotLED = new LED(m_robotMap.LEDController);
 
     /* Controllers */
@@ -47,10 +59,16 @@ public class RobotContainer {
         configureButtonBindings();
 
         /* Default Commands */
-        // drives the robot with a two-axis input from the driver controller
+        // drives the arcade drive with a two-axis input from the driver controller
         m_robotArcadeDrive.setDefaultCommand(
                 new RunCommand(() -> m_robotArcadeDrive.driveWithInput(getDriverController().getLeftYAxis(),
                         getDriverController().getRightXAxis()), m_robotArcadeDrive));
+
+        // drives the arcade drive with a two-axis input from the driver controller
+        m_robotSwerveDrive.setDefaultCommand(
+                new RunCommand(() -> m_robotSwerveDrive.driveWithInput(getDriverController().getRightXAxis(),
+                        getDriverController().getRightYAxis(), getDriverController().getLeftXAxis()), m_robotSwerveDrive));
+
         // continually sends updates to the Blinkin LED controller to keep the lights on
         m_robotLED.setDefaultCommand(new RunCommand(() -> m_robotLED.updateLED(), m_robotLED));
     }
