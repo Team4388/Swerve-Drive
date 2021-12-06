@@ -32,7 +32,8 @@ public class SwerveDrive extends SubsystemBase
     private CANCoder m_leftFrontEncoder; 
     private CANCoder m_rightFrontEncoder;
     private CANCoder m_leftBackEncoder;
-    private CANCoder m_rightBackEncoder;    
+    private CANCoder m_rightBackEncoder;
+        
     public SwerveDrive(WPI_TalonFX leftFrontSteerMotor,WPI_TalonFX leftFrontWheelMotor,WPI_TalonFX rightFrontSteerMotor,WPI_TalonFX rightFrontWheelMotor,
     WPI_TalonFX leftBackSteerMotor,WPI_TalonFX leftBackWheelMotor,WPI_TalonFX rightBackSteerMotor,WPI_TalonFX rightBackWheelMotor, CANCoder leftFrontEncoder,
     CANCoder rightFrontEncoder,
@@ -89,9 +90,7 @@ public class SwerveDrive extends SubsystemBase
         m_rightFrontWheelMotor.set(m_rightFrontSteerMotor.get() + rightFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_leftBackWheelMotor.set(m_leftBackSteerMotor.get() + leftBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightBackWheelMotor.set(m_rightBackSteerMotor.get() + rightBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
-    
-        // PID
-        
+
     }
 
     // public void driveFieldRelative(double awayFromStation, double towardLeftBoundary, double rotate)

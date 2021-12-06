@@ -7,6 +7,7 @@
 
 package frc4388.robot;
 
+import frc4388.utility.Gains;
 import frc4388.utility.LEDPatterns;
 
 /**
@@ -51,6 +52,12 @@ public final class Constants {
         public static final float RIGHT_FRONT_ENCODER_OFFSET = 0;   
         public static final float LEFT_BACK_ENCODER_OFFSET = 0;     
         public static final float RIGHT_BACK_ENCODER_OFFSET = 0;
+
+        // swerve PID constants
+        public static final int SWERVE_SLOT_IDX = 0;
+        public static final int SWERVE_PID_LOOP_IDX = 1;
+        public static final int SWERVE_TIMEOUT_MS = 30;
+        public static final Gains SWERVE_GAINS = new Gains(0.0, 0.0, 0.0, 0.0, 0, 1.0);
     }
     public static final class LEDConstants {
         public static final int LED_SPARK_ID = 0;
