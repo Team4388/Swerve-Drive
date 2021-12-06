@@ -76,13 +76,13 @@ public class SwerveDrive extends SubsystemBase
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
         // Front left module state
-        SwerveModuleState leftFront = SwerveModuleState.optimize(moduleStates[0], new Rotation2d(m_leftFrontEncoder.getPosition()));
+        SwerveModuleState leftFront = SwerveModuleState.optimize(moduleStates[0], Rotation2d.fromDegrees(m_leftFrontEncoder.getPosition()));
         // Front right module state
-        SwerveModuleState rightFront = SwerveModuleState.optimize(moduleStates[1], new Rotation2d(m_rightFrontEncoder.getPosition()));
+        SwerveModuleState rightFront = SwerveModuleState.optimize(moduleStates[1], Rotation2d.fromDegrees(m_rightFrontEncoder.getPosition()));
         // Back left module state
-        SwerveModuleState leftBack = SwerveModuleState.optimize(moduleStates[2], new Rotation2d(m_leftBackEncoder.getPosition()));
+        SwerveModuleState leftBack = SwerveModuleState.optimize(moduleStates[2], Rotation2d.fromDegrees(m_leftBackEncoder.getPosition()));
         // Back right module state
-        SwerveModuleState rightBack = SwerveModuleState.optimize(moduleStates[3], new Rotation2d(m_rightBackEncoder.getPosition()));
+        SwerveModuleState rightBack = SwerveModuleState.optimize(moduleStates[3], Rotation2d.fromDegrees(m_rightBackEncoder.getPosition()));
         
         //Set the Wheel motor speeds
         m_leftFrontWheelMotor.set(m_leftFrontSteerMotor.get() + leftFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);

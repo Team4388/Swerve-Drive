@@ -46,6 +46,11 @@ public final class Constants {
         public static final int RIGHT_FRONT_STEER_CAN_ENCODER_ID = 0;
         public static final int LEFT_BACK_STEER_CAN_ENCODER_ID = 0;
         public static final int RIGHT_BACK_STEER_CAN_ENCODER_ID = 0;
+        //ofsets are in degrees
+        public static final float LEFT_FRONT_ENCODER_OFFSET = 0;    
+        public static final float RIGHT_FRONT_ENCODER_OFFSET = 0;   
+        public static final float LEFT_BACK_ENCODER_OFFSET = 0;     
+        public static final float RIGHT_BACK_ENCODER_OFFSET = 0;
     }
     public static final class LEDConstants {
         public static final int LED_SPARK_ID = 0;
