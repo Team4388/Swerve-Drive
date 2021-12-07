@@ -64,7 +64,7 @@ public class RobotContainer {
                 new RunCommand(() -> m_robotArcadeDrive.driveWithInput(getDriverController().getLeftYAxis(),
                         getDriverController().getRightXAxis()), m_robotArcadeDrive));
 
-        // drives the arcade drive with a two-axis input from the driver controller
+        // drives the swerve drive with a two-axis input from the driver controller
         m_robotSwerveDrive.setDefaultCommand(
                 new RunCommand(() -> m_robotSwerveDrive.driveWithInput(getDriverController().getRightXAxis(),
                         getDriverController().getRightYAxis(), getDriverController().getLeftXAxis()), m_robotSwerveDrive));
