@@ -60,9 +60,9 @@ public class RobotContainer {
 
         /* Default Commands */
         // drives the arcade drive with a two-axis input from the driver controller
-        m_robotArcadeDrive.setDefaultCommand(
+        /*m_robotArcadeDrive.setDefaultCommand(
                 new RunCommand(() -> m_robotArcadeDrive.driveWithInput(getDriverController().getLeftYAxis(),
-                        getDriverController().getRightXAxis()), m_robotArcadeDrive));
+                        getDriverController().getRightXAxis()), m_robotArcadeDrive));*/
 
         // drives the swerve drive with a two-axis input from the driver controller
         m_robotSwerveDrive.setDefaultCommand(
