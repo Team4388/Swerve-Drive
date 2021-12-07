@@ -33,13 +33,15 @@ public class SwerveDrive extends SubsystemBase
     private CANCoder m_leftFrontEncoder; 
     private CANCoder m_rightFrontEncoder;
     private CANCoder m_leftBackEncoder;
-    private CANCoder m_rightBackEncoder;
-        
+    private CANCoder m_rightBackEncoder;    
+    public static Gains m_swerveGains = SwerveDriveConstants.SWERVE_GAINS;
+
     public SwerveDrive(WPI_TalonFX leftFrontSteerMotor,WPI_TalonFX leftFrontWheelMotor,WPI_TalonFX rightFrontSteerMotor,WPI_TalonFX rightFrontWheelMotor,
     WPI_TalonFX leftBackSteerMotor,WPI_TalonFX leftBackWheelMotor,WPI_TalonFX rightBackSteerMotor,WPI_TalonFX rightBackWheelMotor, CANCoder leftFrontEncoder,
     CANCoder rightFrontEncoder,
     CANCoder leftBackEncoder,
     CANCoder rightBackEncoder)
+    
     {
         m_leftFrontSteerMotor = leftFrontSteerMotor;
         m_leftFrontWheelMotor = leftFrontWheelMotor;
@@ -104,6 +106,36 @@ public class SwerveDrive extends SubsystemBase
         m_rightFrontSteerMotor.set(TalonFXControlMode.Position, rightFront.angle.getDegrees());
         m_leftBackSteerMotor.set(TalonFXControlMode.Position, leftBack.angle.getDegrees());
         m_rightBackSteerMotor.set(TalonFXControlMode.Position, rightBack.angle.getDegrees());
+         
+    public void setSwerveGains(){
+        m_leftFrontWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_leftFrontWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftFrontWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftFrontWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftFrontWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+
+        m_rightFrontWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_rightFrontWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightrFontWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+
+        m_leftBackWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_leftBackWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+
+        m_rightBackWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_rightBackWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightBackWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightBackWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightBackWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+
+  }
+
+        // PID
+        
     }
 
 
