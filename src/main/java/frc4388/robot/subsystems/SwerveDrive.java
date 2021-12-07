@@ -7,6 +7,7 @@
 
 package frc4388.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -69,7 +70,7 @@ public class SwerveDrive extends SubsystemBase
         var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.ROTATION_SPEED /*in rad/s */);
         driveFromSpeeds(speeds);
     }
-
+    //Converts a ChassisSpeed to SwerveModuleStates (targets)
     public void driveFromSpeeds(ChassisSpeeds speeds)
     {
         //https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html 
@@ -85,13 +86,27 @@ public class SwerveDrive extends SubsystemBase
         // Back right module state
         SwerveModuleState rightBack = SwerveModuleState.optimize(moduleStates[3], Rotation2d.fromDegrees(m_rightBackEncoder.getPosition()));
         
+        //Set the motors
+        setSwerveMotors(leftFront, leftBack, rightFront, rightBack);
+    }
+
+    //Sets steering motors to PID values
+    public void setSwerveMotors(SwerveModuleState leftFront, SwerveModuleState leftBack, SwerveModuleState rightFront, SwerveModuleState rightBack)
+    {
         //Set the Wheel motor speeds
         m_leftFrontWheelMotor.set(m_leftFrontSteerMotor.get() + leftFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightFrontWheelMotor.set(m_rightFrontSteerMotor.get() + rightFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_leftBackWheelMotor.set(m_leftBackSteerMotor.get() + leftBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightBackWheelMotor.set(m_rightBackSteerMotor.get() + rightBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
 
+        //PID
+        m_leftFrontSteerMotor.set(TalonFXControlMode.Position, leftFront.angle.getDegrees());
+        m_rightFrontSteerMotor.set(TalonFXControlMode.Position, rightFront.angle.getDegrees());
+        m_leftBackSteerMotor.set(TalonFXControlMode.Position, leftBack.angle.getDegrees());
+        m_rightBackSteerMotor.set(TalonFXControlMode.Position, rightBack.angle.getDegrees());
     }
+
+
 
     // public void driveFieldRelative(double awayFromStation, double towardLeftBoundary, double rotate)
     // {
