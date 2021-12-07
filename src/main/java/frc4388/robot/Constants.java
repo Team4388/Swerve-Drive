@@ -62,6 +62,7 @@ public final class Constants {
         // swerve configuration
         public static final double NEUTRAL_DEADBAND = 0.04;
         public static final double OPEN_LOOP_RAMP_RATE = 0.2;
+        public static final int REMOTE_0 = 0;
     }
     public static final class LEDConstants {
         public static final int LED_SPARK_ID = 0;
