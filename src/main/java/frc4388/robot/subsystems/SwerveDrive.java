@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc4388.robot.Constants.SwerveDriveConstants;
+import frc4388.utility.Gains;
 
 public class SwerveDrive extends SubsystemBase
 {
@@ -106,7 +107,8 @@ public class SwerveDrive extends SubsystemBase
         m_rightFrontSteerMotor.set(TalonFXControlMode.Position, rightFront.angle.getDegrees());
         m_leftBackSteerMotor.set(TalonFXControlMode.Position, leftBack.angle.getDegrees());
         m_rightBackSteerMotor.set(TalonFXControlMode.Position, rightBack.angle.getDegrees());
-         
+    }    
+    
     public void setSwerveGains(){
         m_leftFrontWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
         m_leftFrontWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
@@ -117,7 +119,7 @@ public class SwerveDrive extends SubsystemBase
         m_rightFrontWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
         m_rightFrontWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
         m_rightFrontWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightrFontWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
         m_rightFrontWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
 
         m_leftBackWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
@@ -131,8 +133,6 @@ public class SwerveDrive extends SubsystemBase
         m_rightBackWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
         m_rightBackWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
         m_rightBackWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-
-  }
 
         // PID
         
