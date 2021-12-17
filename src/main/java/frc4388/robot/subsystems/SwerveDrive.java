@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc4388.robot.Constants.SwerveDriveConstants;
 import frc4388.utility.Gains;
+import frc4388.utility.RobotGyro;
 
 public class SwerveDrive extends SubsystemBase
 {
@@ -35,14 +37,39 @@ public class SwerveDrive extends SubsystemBase
     private CANCoder m_rightFrontEncoder;
     private CANCoder m_leftBackEncoder;
     private CANCoder m_rightBackEncoder;    
+    double halfWidth = SwerveDriveConstants.WIDTH / 2.d;
+    double halfHeight = SwerveDriveConstants.HEIGHT / 2.d;
     public static Gains m_swerveGains = SwerveDriveConstants.SWERVE_GAINS;
+
+
+    Translation2d m_frontLeftLocation = 
+        new Translation2d(
+            Units.inchesToMeters(halfHeight), 
+            Units.inchesToMeters(halfWidth));
+    Translation2d m_frontRightLocation =
+         new Translation2d(
+            Units.inchesToMeters(halfHeight), 
+            Units.inchesToMeters(-halfWidth));
+    Translation2d m_backLeftLocation = 
+        new Translation2d(
+            Units.inchesToMeters(-halfHeight), 
+            Units.inchesToMeters(halfWidth));
+    Translation2d m_backRightLocation = 
+        new Translation2d(
+            Units.inchesToMeters(-halfHeight), 
+            Units.inchesToMeters(-halfWidth));
+        //setSwerveGains();
+        
+    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+    public SwerveModule[] modules;
+    public RobotGyro gyro; //TODO Add Gyro Lol
+
 
     public SwerveDrive(WPI_TalonFX leftFrontSteerMotor,WPI_TalonFX leftFrontWheelMotor,WPI_TalonFX rightFrontSteerMotor,WPI_TalonFX rightFrontWheelMotor,
     WPI_TalonFX leftBackSteerMotor,WPI_TalonFX leftBackWheelMotor,WPI_TalonFX rightBackSteerMotor,WPI_TalonFX rightBackWheelMotor, CANCoder leftFrontEncoder,
     CANCoder rightFrontEncoder,
     CANCoder leftBackEncoder,
     CANCoder rightBackEncoder)
-    
     {
         m_leftFrontSteerMotor = leftFrontSteerMotor;
         m_leftFrontWheelMotor = leftFrontWheelMotor;
@@ -56,22 +83,32 @@ public class SwerveDrive extends SubsystemBase
         m_rightFrontEncoder = rightFrontEncoder;
         m_leftBackEncoder = leftBackEncoder;
         m_rightBackEncoder = rightBackEncoder; 
-        double halfWidth = SwerveDriveConstants.WIDTH / 2.d;
-        double halfHeight = SwerveDriveConstants.HEIGHT / 2.d;
 
-        Translation2d m_frontLeftLocation = new Translation2d(halfHeight, halfWidth);
-        Translation2d m_frontRightLocation = new Translation2d(halfHeight, -halfWidth);
-        Translation2d m_backLeftLocation = new Translation2d(-halfHeight, halfWidth);
-        Translation2d m_backRightLocation = new Translation2d(-halfHeight, -halfWidth);
-        
-        m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+        modules = new SwerveModule[] {
+            new SwerveModule(m_leftFrontWheelMotor, m_leftFrontSteerMotor, m_leftFrontEncoder), // Front Left
+            new SwerveModule(m_rightFrontWheelMotor, m_rightFrontSteerMotor, m_rightFrontEncoder), // Front Right
+            new SwerveModule(m_leftBackWheelMotor, m_leftBackSteerMotor, m_leftBackEncoder), // Back Left
+            new SwerveModule(m_rightFrontWheelMotor, m_rightFrontSteerMotor, m_rightFrontEncoder)  // Back Right
+        };
+        //gyro.reset(); 
     }
 
 
-    public void driveWithInput(double strafeX, double strafeY, double rotate)
+    public void driveWithInput(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
     {
-        var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.ROTATION_SPEED /*in rad/s */);
-        driveFromSpeeds(speeds);
+        /*var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.ROTATION_SPEED //in rad/s );
+        driveFromSpeeds(speeds);*/
+        SwerveModuleState[] states =
+            kinematics.toSwerveModuleStates(
+                fieldRelative
+                  ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+                  : new ChassisSpeeds(xSpeed, ySpeed, rot));
+         SwerveDriveKinematics.normalizeWheelSpeeds(states, SwerveDriveConstants.MAX_SPEED_FEET_PER_SEC);
+         for (int i = 0; i < states.length; i++) {
+            SwerveModule module = modules[i];
+            SwerveModuleState state = states[i];
+            module.setDesiredState(state);
+    }
     }
     //Converts a ChassisSpeed to SwerveModuleStates (targets)
     public void driveFromSpeeds(ChassisSpeeds speeds)
@@ -96,47 +133,47 @@ public class SwerveDrive extends SubsystemBase
     //Sets steering motors to PID values
     public void setSwerveMotors(SwerveModuleState leftFront, SwerveModuleState leftBack, SwerveModuleState rightFront, SwerveModuleState rightBack)
     {
-        //Set the Wheel motor speeds
+        /*//Set the Wheel motor speeds
         m_leftFrontWheelMotor.set(m_leftFrontSteerMotor.get() + leftFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightFrontWheelMotor.set(m_rightFrontSteerMotor.get() + rightFront.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_leftBackWheelMotor.set(m_leftBackSteerMotor.get() + leftBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
         m_rightBackWheelMotor.set(m_rightBackSteerMotor.get() + rightBack.speedMetersPerSecond * SwerveDriveConstants.WHEEL_SPEED);
 
         //PID
-        m_leftFrontSteerMotor.set(TalonFXControlMode.Position, leftFront.angle.getDegrees());
-        m_rightFrontSteerMotor.set(TalonFXControlMode.Position, rightFront.angle.getDegrees());
-        m_leftBackSteerMotor.set(TalonFXControlMode.Position, leftBack.angle.getDegrees());
+        m_leftFrontSteerMotor.set(TalonFXControlMode.Position, leftFront.angle.getDegrees() * 12000);
+        m_rightFrontSteerMotor.set(TalonFXControlMode.Position, rightFront.angle.getDegrees() * 12000);
+        m_leftBackSteerMotor.set(TalonFXControlMode.Position, leftBack.angle.getDegrees() * 12000);
         m_rightBackSteerMotor.set(TalonFXControlMode.Position, rightBack.angle.getDegrees());
+
+        System.out.println("Target: " + leftFront.angle.getDegrees());*/
     }    
     
-    public void setSwerveGains(){
-        m_leftFrontWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
-        m_leftFrontWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_leftFrontWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_leftFrontWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_leftFrontWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+    /*public void setSwerveGains(){
+        m_leftFrontSteerMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_leftFrontSteerMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftFrontSteerMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftFrontSteerMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftFrontSteerMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
 
-        m_rightFrontWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
-        m_rightFrontWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightFrontWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightFrontWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightFrontWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontSteerMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_rightFrontSteerMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontSteerMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontSteerMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightFrontSteerMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
 
-        m_leftBackWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
-        m_leftBackWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_leftBackWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_leftBackWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_leftBackWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackSteerMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_leftBackSteerMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackSteerMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackSteerMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_leftBackSteerMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
 
-        m_rightBackWheelMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
-        m_rightBackWheelMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightBackWheelMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightBackWheelMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-        m_rightBackWheelMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
-
-        // PID
+        m_rightBackSteerMotor.selectProfileSlot(SwerveDriveConstants.SWERVE_SLOT_IDX, SwerveDriveConstants.SWERVE_PID_LOOP_IDX);
+        m_rightBackSteerMotor.config_kF(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kF, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightBackSteerMotor.config_kP(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kP, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightBackSteerMotor.config_kI(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kI, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
+        m_rightBackSteerMotor.config_kD(SwerveDriveConstants.SWERVE_SLOT_IDX, m_swerveGains.m_kD, SwerveDriveConstants.SWERVE_TIMEOUT_MS);
         
-    }
+    }*/
 
 
 
