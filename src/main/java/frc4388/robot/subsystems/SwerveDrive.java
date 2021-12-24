@@ -93,7 +93,14 @@ public class SwerveDrive extends SubsystemBase
         //gyro.reset(); 
     }
 
-
+   /**
+   * Method to drive the robot using joystick info.
+   *
+   * @param xSpeed Speed of the robot in the x direction (forward).
+   * @param ySpeed Speed of the robot in the y direction (sideways).
+   * @param rot Angular rate of the robot.
+   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
+   */
     public void driveWithInput(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
     {
         /*var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.ROTATION_SPEED //in rad/s );
