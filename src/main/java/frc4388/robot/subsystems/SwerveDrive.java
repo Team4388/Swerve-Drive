@@ -88,7 +88,7 @@ public class SwerveDrive extends SubsystemBase
             new SwerveModule(m_leftFrontWheelMotor, m_leftFrontSteerMotor, m_leftFrontEncoder), // Front Left
             new SwerveModule(m_rightFrontWheelMotor, m_rightFrontSteerMotor, m_rightFrontEncoder), // Front Right
             new SwerveModule(m_leftBackWheelMotor, m_leftBackSteerMotor, m_leftBackEncoder), // Back Left
-            new SwerveModule(m_rightFrontWheelMotor, m_rightFrontSteerMotor, m_rightFrontEncoder)  // Back Right
+            new SwerveModule(m_rightBackWheelMotor, m_rightBackSteerMotor, m_rightBackEncoder)  // Back Right
         };
         //gyro.reset(); 
     }
@@ -105,12 +105,14 @@ public class SwerveDrive extends SubsystemBase
     {
         /*var speeds = new ChassisSpeeds(strafeX, strafeY, rotate * SwerveDriveConstants.ROTATION_SPEED //in rad/s );
         driveFromSpeeds(speeds);*/
+        double xSpeedMetersPerSecond = xSpeed * SwerveDriveConstants.JOYSTICK_TO_METERS_PER_SECOND;
+        double ySpeedMetersPerSecond = ySpeed * SwerveDriveConstants.JOYSTICK_TO_METERS_PER_SECOND;
         SwerveModuleState[] states =
             kinematics.toSwerveModuleStates(
                 fieldRelative
-                  ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
-                  : new ChassisSpeeds(xSpeed, ySpeed, rot));
-         SwerveDriveKinematics.normalizeWheelSpeeds(states, SwerveDriveConstants.MAX_SPEED_FEET_PER_SEC);
+                  ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedMetersPerSecond, ySpeedMetersPerSecond, rot, gyro.getRotation2d())
+                  : new ChassisSpeeds(xSpeedMetersPerSecond, ySpeedMetersPerSecond, rot));
+         SwerveDriveKinematics.normalizeWheelSpeeds(states, Units.feetToMeters(SwerveDriveConstants.MAX_SPEED_FEET_PER_SEC));
          for (int i = 0; i < states.length; i++) {
             SwerveModule module = modules[i];
             SwerveModuleState state = states[i];

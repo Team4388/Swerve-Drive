@@ -4,24 +4,21 @@
 
 package frc4388.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
+
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.util.Units;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc4388.robot.Constants.SwerveDriveConstants;
 import frc4388.utility.Gains;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class SwerveModule extends SubsystemBase {
     private WPI_TalonFX driveMotor;
@@ -60,6 +57,7 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.configAllSettings(driveTalonFXConfiguration);*/
 
     CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
+    //CANCODER CONFIG
     canCoder.configAllSettings(canCoderConfiguration);
   }
 
@@ -82,7 +80,7 @@ public class SwerveModule extends SubsystemBase {
     Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
     // Find the new absolute position of the module based on the difference in rotation
-    double deltaTicks = (rotationDelta.getDegrees() / 360) * kEncoderTicksPerRotation;
+    double deltaTicks = (rotationDelta.getDegrees() / 360.) * kEncoderTicksPerRotation;
     // Convert the CANCoder from it's position reading back to ticks
     double currentTicks = canCoder.getPosition() / canCoder.configGetFeedbackCoefficient();
     double desiredTicks = currentTicks + deltaTicks;
@@ -90,6 +88,6 @@ public class SwerveModule extends SubsystemBase {
 
 
     double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-    driveMotor.set(feetPerSecond / SwerveDriveConstants.MAX_SPEED_FEET_PER_SEC);
+    driveMotor.set(angleMotor.get() + feetPerSecond / SwerveDriveConstants.SPEED_FEET_PER_SECOND_AT_FULL_POWER);
   }
 }

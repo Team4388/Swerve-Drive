@@ -35,7 +35,9 @@ public final class Constants {
         public static final double WHEEL_SPEED = 0.1;
         public static final double WIDTH = 22;
         public static final double HEIGHT = 22;
-        public static final double MAX_SPEED_FEET_PER_SEC = 5;
+        public static final double JOYSTICK_TO_METERS_PER_SECOND = 5;
+        public static final double MAX_SPEED_FEET_PER_SEC = 16;
+        public static final double SPEED_FEET_PER_SECOND_AT_FULL_POWER = 20;
         public static final int LEFT_FRONT_STEER_CAN_ID = 2;
         public static final int LEFT_FRONT_WHEEL_CAN_ID = 3;
         public static final int RIGHT_FRONT_STEER_CAN_ID = 4;
