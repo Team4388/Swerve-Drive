@@ -85,10 +85,10 @@ public class SwerveDrive extends SubsystemBase
         m_rightBackEncoder = rightBackEncoder; 
 
         modules = new SwerveModule[] {
-            new SwerveModule(m_leftFrontWheelMotor, m_leftFrontSteerMotor, m_leftFrontEncoder), // Front Left
-            new SwerveModule(m_rightFrontWheelMotor, m_rightFrontSteerMotor, m_rightFrontEncoder), // Front Right
-            new SwerveModule(m_leftBackWheelMotor, m_leftBackSteerMotor, m_leftBackEncoder), // Back Left
-            new SwerveModule(m_rightBackWheelMotor, m_rightBackSteerMotor, m_rightBackEncoder)  // Back Right
+            new SwerveModule(m_leftFrontWheelMotor, m_leftFrontSteerMotor, m_leftFrontEncoder, SwerveDriveConstants.LEFT_FRONT_ENCODER_OFFSET), // Front Left
+            new SwerveModule(m_rightFrontWheelMotor, m_rightFrontSteerMotor, m_rightFrontEncoder, SwerveDriveConstants.RIGHT_FRONT_ENCODER_OFFSET), // Front Right
+            new SwerveModule(m_leftBackWheelMotor, m_leftBackSteerMotor, m_leftBackEncoder, SwerveDriveConstants.LEFT_BACK_ENCODER_OFFSET), // Back Left
+            new SwerveModule(m_rightBackWheelMotor, m_rightBackSteerMotor, m_rightBackEncoder, SwerveDriveConstants.RIGHT_BACK_ENCODER_OFFSET)  // Back Right
         };
         //gyro.reset(); 
     }

@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc4388.robot.Constants.SwerveDriveConstants;
@@ -30,7 +31,7 @@ public class SwerveModule extends SubsystemBase {
 
 
   /** Creates a new SwerveModule. */
-  public SwerveModule(WPI_TalonFX driveMotor, WPI_TalonFX angleMotor, CANCoder canCoder) {
+  public SwerveModule(WPI_TalonFX driveMotor, WPI_TalonFX angleMotor, CANCoder canCoder, double offset) {
     this.driveMotor = driveMotor;
     this.angleMotor = angleMotor;
     this.canCoder = canCoder;
@@ -57,7 +58,7 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.configAllSettings(driveTalonFXConfiguration);*/
 
     CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
-    //CANCODER CONFIG
+    canCoderConfiguration.magnetOffsetDegrees = offset;
     canCoder.configAllSettings(canCoderConfiguration);
   }
 
@@ -74,6 +75,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     Rotation2d currentRotation = getAngle();
+    SmartDashboard.putNumber("Motor " + angleMotor.getDeviceID(), currentRotation.getDegrees());
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
 
     // Find the difference between our current rotational position + our new rotational position
